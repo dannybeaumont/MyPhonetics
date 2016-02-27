@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Phonetics</string>
+    <string name="url">https://wordsapiv1.p.mashape.com/words/</string>
+    <string name="mashape_key">SitqiUrhaFmshYCW1fIls78yGT5Wp1eOCDOjsnSAWtuY0dbf6B</string>
+    <string name="header_key">X-Mashape-Key</string>
+    <string name="definition">/definitions</string>
+</resources>
