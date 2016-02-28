@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -38,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Spinner spinnerSecond;
     TextView textView;
 
+    private ArrayList<Definition> defined;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +67,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     if (result.getResult() != null) {
                                         JsonArray definitions = result.getResult().getAsJsonArray("definitions");
                                         textView.setText("");
-                                        ArrayList<Definition> defined = new ArrayList<Definition>();
+                                        defined = new ArrayList<Definition>();
                                         for(JsonElement definition : definitions){
-                                            defined.add(new Definition(definition.getAsJsonObject()));
-                                            textView.append(definition.getAsJsonObject().get("definition").getAsString()+"\n");
-                                            textView.append(definition.getAsJsonObject().get("partOfSpeech").getAsString()+"\n");
+                                            Gson gson = new Gson();
+                                            Definition definition1 = gson.fromJson(definition,Definition.class);
+                                            defined.add(definition1);
+
+                                            textView.append(definition1.getDefinition()+"\n");
+                                            textView.append(definition1.getPartOfSpeech()+"\n");
                                         }
                                     }else{
                                         textView.setText("No Word Found");
@@ -114,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String getSpinnersString() {
         return spinnerFirst.getSelectedItem().toString() + spinnerSecond.getSelectedItem().toString();
+    }
+    public ArrayList<Definition> getDefined() {
+        return defined;
     }
 
 }
