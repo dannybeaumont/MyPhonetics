@@ -1,6 +1,7 @@
 package dannybeaumont.myphonitics.activity;
 
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -19,6 +20,7 @@ import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowActivity;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import model.Definition;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(CustomRobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -129,6 +132,26 @@ public class MainActivityTest {
         Assert.assertEquals(expected.getPartOfSpeech(), actual.getPartOfSpeech());
     }
 
+    @Test
+    public void lookupButtonCallsIonServiceAndFails() throws Exception {
+
+        Button button = (Button) subject.findViewById(R.id.button_define);
+        button.performClick();
+        ArrayList<Definition> testDefinition = subject.getDefined();
+        String results = ((TextView)subject.findViewById(R.id.text_view)).getText().toString();
+        Assert.assertThat(testDefinition.size(), is(0));
+        Assert.assertEquals(results,"No Word Found");
+    }
+
+    @Test
+    public void speakButton() throws Exception {
+
+        Button button = (Button) subject.findViewById(R.id.button_speak);
+        button.performClick();
+        String results = subject.getWord();
+        Assert.assertEquals(results, "band");
+    }
+
     private Definition getExpectedDefinition() {
         String response = "{\n" +
                 "      \"definition\": \"an unofficial association of people or groups\",\n" +
@@ -136,7 +159,7 @@ public class MainActivityTest {
                 "    }";
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new StringReader(response));
-        Definition definition = gson.fromJson(reader,Definition.class);
+        Definition definition = gson.fromJson(reader, Definition.class);
         return definition;
     }
 
@@ -153,9 +176,19 @@ public class MainActivityTest {
 
     private void setupIonMock(){
         MockRequestHandler handler = Mockito.mock(MockRequestHandler.class);
-        when(handler.request("https://wordsapiv1.p.mashape.com/words/band/definitions")).thenReturn(getJsonResposne());
+        when(handler.request("https://wordsapiv1.p.mashape.com/words/band/definitions"))
+                .thenReturn(getJsonResposne())
+                .thenReturn(getEmptyReponse())
+                .thenReturn(getJsonResposne());
 
         MockLoader.install(Ion.getDefault(RuntimeEnvironment.application), handler);
+    }
+
+    private JsonObject getEmptyReponse() {
+        JsonParser parser = new JsonParser();
+        return (JsonObject) parser.parse("{\n" +
+                "  \"definitions\": []\n" +
+                "}");
     }
 
     private JsonObject getJsonResposne() {

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         speakButton.setOnClickListener(this);
         spinnerFirst = (Spinner) findViewById(R.id.spinner);
         spinnerSecond = (Spinner) findViewById(R.id.spinner2);
-        textView = (TextView) findViewById(R.id.textView);
+        textView = (TextView) findViewById(R.id.text_view);
         speech = new TextToSpeech(getApplicationContext(),this);
         lookupButton = (Button) findViewById(R.id.button_define);
         lookupButton.setOnClickListener(new View.OnClickListener() {
@@ -68,16 +68,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         JsonArray definitions = result.getResult().getAsJsonArray("definitions");
                                         textView.setText("");
                                         defined = new ArrayList<Definition>();
-                                        for(JsonElement definition : definitions){
+                                        for (JsonElement definition : definitions) {
                                             Gson gson = new Gson();
-                                            Definition definition1 = gson.fromJson(definition,Definition.class);
+                                            Definition definition1 = gson.fromJson(definition, Definition.class);
                                             defined.add(definition1);
 
-                                            textView.append(definition1.getDefinition()+"\n");
-                                            textView.append(definition1.getPartOfSpeech()+"\n");
+                                            textView.append(definition1.getDefinition() + "\n");
+                                            textView.append(definition1.getPartOfSpeech() + "\n");
                                         }
-                                    }else{
-                                        textView.setText("No Word Found");
+                                        if (defined.size() <= 0){
+                                            textView.setText("No Word Found");
+                                        }
                                     }
 
                                 }
@@ -121,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public ArrayList<Definition> getDefined() {
         return defined;
+    }
+    public TextToSpeech getSpeech() {
+        return speech;
     }
 
 }

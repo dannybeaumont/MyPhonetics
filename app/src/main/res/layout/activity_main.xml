@@ -10,66 +10,58 @@
     tools:context="dannybeaumont.myphonetics.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">>
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_weight=".2"
+        android:id="@+id/linearLayout">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:entries="@array/first_sounds"
+            android:layout_weight=".5"/>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner2"
+            android:entries="@array/second_sounds"
+            android:layout_weight=".5" />
+
+    </LinearLayout>
+
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight=".2">
+            android:layout_weight=".2"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/linearLayout2">
 
-            <Spinner
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"
-                android:entries="@array/first_sounds"
+                android:text="Speak"
+                android:id="@+id/button_speak"
                 android:layout_weight=".5"/>
 
-            <Spinner
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner2"
-                android:entries="@array/second_sounds"
-                android:layout_weight=".5" />
-
+                android:text="Look up"
+                android:id="@+id/button_define"
+                android:layout_weight=".3"/>
         </LinearLayout>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Speak"
-                    android:id="@+id/button_speak"
-                    android:layout_weight=".5"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Look up"
-                    android:id="@+id/button_define"
-                    android:layout_weight=".3"/>
-            </LinearLayout>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="New Text"
-                android:id="@+id/textView" />
-        </LinearLayout>
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/text_view"
+        android:layout_below="@+id/linearLayout2" />
 
 </RelativeLayout>
